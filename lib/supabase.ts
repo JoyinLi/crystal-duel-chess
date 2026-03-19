@@ -1,16 +1,27 @@
 import { createClient } from '@supabase/supabase-js';
+import type { RealtimeChannel } from '@supabase/supabase-js';
 import type { GameState } from './types';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables');
+function logMissingEnv() {
+  console.error(
+    `Missing Supabase environment variables: url=${!!supabaseUrl}, key=${!!supabaseKey}`
+  );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase =
+  supabaseUrl && supabaseKey
+    ? createClient(supabaseUrl, supabaseKey)
+    : null;
 
 export async function getGameState(roomId: string): Promise<GameState | null> {
+  if (!supabase) {
+    logMissingEnv();
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -29,6 +40,11 @@ export async function updateGameState(
   roomId: string,
   updates: Partial<GameState>
 ): Promise<GameState | null> {
+  if (!supabase) {
+    logMissingEnv();
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('games')
     .update({
@@ -48,6 +64,11 @@ export async function updateGameState(
 }
 
 export async function initializeGame(roomId: string): Promise<GameState | null> {
+  if (!supabase) {
+    logMissingEnv();
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('games')
     .insert({
@@ -71,7 +92,12 @@ export async function initializeGame(roomId: string): Promise<GameState | null> 
 export function subscribeToGameUpdates(
   roomId: string,
   callback: (game: GameState) => void
-) {
+): RealtimeChannel | null {
+  if (!supabase) {
+    logMissingEnv();
+    return null;
+  }
+
   const subscription = supabase
     .channel(`game:${roomId}`)
     .on(
