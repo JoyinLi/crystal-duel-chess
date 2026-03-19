@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { subscribeToGameUpdates } from '@/lib/supabase';
 import type { GameState } from '@/lib/types';
 
-export function useRealtimeSync(roomId: string, onUpdate: (game: GameState) => void) {
+export function useRealtimeSync(
+  roomId: string,
+  onUpdate: (game: GameState) => void
+) {
   const [isConnected, setIsConnected] = useState(true);
 
   useEffect(() => {
@@ -12,7 +15,7 @@ export function useRealtimeSync(roomId: string, onUpdate: (game: GameState) => v
     });
 
     return () => {
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, [roomId, onUpdate]);
 
