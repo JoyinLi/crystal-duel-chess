@@ -116,8 +116,8 @@ export function ChessBoard({
           borderRadius: '12px',
           boxShadow: '0 25px 50px rgba(0, 0, 0, 0.6)',
         }}
-        customLightSquareStyle={{ backgroundColor: '#FCFCFA' }}
-customDarkSquareStyle={{ backgroundColor: '#C8C8C8' }}
+        customLightSquareStyle={{ backgroundColor: '#f2f2f2' }}
+customDarkSquareStyle={{ backgroundColor: '#404244' }}
 customSquareStyles={customSquareStyles}
         
       />
