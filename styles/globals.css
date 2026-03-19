@@ -20,6 +20,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #e0e0e0;
+  min-height: 100vh;
 }
 
 /* Smooth transitions */
@@ -36,33 +37,7 @@ body {
   transition: background-color 0.15s ease;
 }
 
-/* 棋子样式优化 */
-svg[viewBox="0 0 45 45"] {
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+/* 棋子阴影 */
+svg[viewBox='0 0 45 45'] {
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
 }
-
-/* 强制设置棋盘格子颜色 */
-.chessboard-container [style*="background-color"] {
-  background-color: #FCFCFA !important;
-}
-
-/* 深色格子 */
-.chessboard-container div[style*="rgb(184, 139, 74)"],
-.chessboard-container div[style*="rgb(240, 217, 181)"] {
-  background-color: #C8C8C8 !important;
-}
-
-/* react-chessboard 的浅色格子 */
-.chessboard-container > div > div > div {
-  background-color: #FCFCFA !important;
-}
-
-/* react-chessboard 的深色格子 - 使用 nth-child 选择器 */
-.chessboard-container > div > div > div:nth-child(odd) {
-  background-color: #C8C8C8 !important;
-}
-
-.chessboard-container > div > div > div:nth-child(even) {
-  background-color: #FCFCFA !important;
-}
-
