@@ -10,7 +10,7 @@ import { useGameState } from '@/hooks/useGameState';
 import { useRealtimeSync } from '@/hooks/useRealtimeSync';
 import type { PlayerSide, GameState } from '@/lib/types';
 
-export default function RoomPage({ params }: { params: { roomId: string } }) {
+export default function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
   const searchParams = useSearchParams();
   const side = (searchParams.get('side') as PlayerSide) || 'white';
   const roomId = 'crystal-duel';
