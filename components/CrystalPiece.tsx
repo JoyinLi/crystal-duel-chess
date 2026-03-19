@@ -2,11 +2,10 @@ import React from 'react';
 
 interface CrystalPieceProps {
   piece: string;
-  isDark: boolean;
   size?: number;
 }
 
-export function CrystalPiece({ piece, isDark, size = 45 }: CrystalPieceProps) {
+export function CrystalPiece({ piece, size = 45 }: CrystalPieceProps) {
   const isWhite = piece === piece.toUpperCase();
   const fillColor = isWhite ? '#FDABD1' : '#358AF5';
   const darkColor = isWhite ? '#F08FB8' : '#1E5FD8';

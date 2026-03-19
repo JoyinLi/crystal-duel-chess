@@ -8,9 +8,9 @@ import { GameControls } from '@/components/GameControls';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { useGameState } from '@/hooks/useGameState';
 import { useRealtimeSync } from '@/hooks/useRealtimeSync';
-import type { PlayerSide, GameState } from '@/lib/types';
+import type { PlayerSide } from '@/lib/types';
 
-export default function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
+export default function RoomPage() {
   const searchParams = useSearchParams();
   const side = (searchParams.get('side') as PlayerSide) || 'white';
   const roomId = 'crystal-duel';
@@ -28,6 +28,7 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
       const timer = setTimeout(() => setLocalError(null), 3000);
       return () => clearTimeout(timer);
     }
+    return;
   }, [error]);
 
   if (loading) {

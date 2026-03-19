@@ -31,7 +31,7 @@ export function ChessBoard({
       if (disabled || !isPlayerTurn) return;
 
       const game = new Chess(fen);
-      const piece = game.get(square);
+      const piece = game.get(square as any);
 
       // If no piece selected yet
       if (!selectedSquare) {
@@ -89,18 +89,18 @@ export function ChessBoard({
   });
 
   const customPieces = {
-    wP: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="P" isDark={isDark} />,
-    wN: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="N" isDark={isDark} />,
-    wB: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="B" isDark={isDark} />,
-    wR: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="R" isDark={isDark} />,
-    wQ: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="Q" isDark={isDark} />,
-    wK: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="K" isDark={isDark} />,
-    bP: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="p" isDark={isDark} />,
-    bN: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="n" isDark={isDark} />,
-    bB: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="b" isDark={isDark} />,
-    bR: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="r" isDark={isDark} />,
-    bQ: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="q" isDark={isDark} />,
-    bK: ({ isDark }: { isDark: boolean }) => <CrystalPiece piece="k" isDark={isDark} />,
+    wP: () => <CrystalPiece piece="P" />,
+    wN: () => <CrystalPiece piece="N" />,
+    wB: () => <CrystalPiece piece="B" />,
+    wR: () => <CrystalPiece piece="R" />,
+    wQ: () => <CrystalPiece piece="Q" />,
+    wK: () => <CrystalPiece piece="K" />,
+    bP: () => <CrystalPiece piece="p" />,
+    bN: () => <CrystalPiece piece="n" />,
+    bB: () => <CrystalPiece piece="b" />,
+    bR: () => <CrystalPiece piece="r" />,
+    bQ: () => <CrystalPiece piece="q" />,
+    bK: () => <CrystalPiece piece="k" />,
   };
 
   return (
@@ -116,11 +116,10 @@ export function ChessBoard({
           borderRadius: '12px',
           boxShadow: '0 25px 50px rgba(0, 0, 0, 0.6)',
         }}
-        customSquareStyles={{
-          light: '#FCFCFA',
-          dark: '#C8C8C8',
-          ...customSquareStyles,
-        }}
+        customLightSquareStyle={{ backgroundColor: '#FCFCFA' }}
+customDarkSquareStyle={{ backgroundColor: '#C8C8C8' }}
+customSquareStyles={customSquareStyles}
+        
       />
     </div>
   );

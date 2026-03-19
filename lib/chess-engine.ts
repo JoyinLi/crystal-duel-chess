@@ -16,7 +16,7 @@ export function validateAndMakeMove(
   try {
     const move = game.move(
       { from: from as any, to: to as any, promotion: promotion as any },
-      { sloppy: false }
+      { strict: false }
     );
 
     if (!move) {
