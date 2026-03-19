@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { CrystalPiece } from './CrystalPiece';
 import { getLegalMoves } from '@/lib/chess-engine';
@@ -14,6 +14,9 @@ interface ChessBoardProps {
   currentTurn: 'white' | 'black';
   disabled?: boolean;
 }
+
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 export function ChessBoard({
   fen,
@@ -33,9 +36,7 @@ export function ChessBoard({
       const game = new Chess(fen);
       const piece = game.get(square as any);
 
-      // If no piece selected yet
       if (!selectedSquare) {
-        // Check if clicked square has own piece
         if (piece && piece.color === (playerSide === 'white' ? 'w' : 'b')) {
           setSelectedSquare(square);
           const moves = getLegalMoves(fen, square);
@@ -44,15 +45,12 @@ export function ChessBoard({
         return;
       }
 
-      // If already have selected piece
       if (square === selectedSquare) {
-        // Deselect
         setSelectedSquare(null);
         setLegalMoves([]);
         return;
       }
 
-      // Check if clicked square has own piece (switch selection)
       if (piece && piece.color === (playerSide === 'white' ? 'w' : 'b')) {
         setSelectedSquare(square);
         const moves = getLegalMoves(fen, square);
@@ -60,7 +58,6 @@ export function ChessBoard({
         return;
       }
 
-      // Check if legal move
       if (legalMoves.includes(square)) {
         const success = await onMove(selectedSquare, square);
         if (success) {
@@ -72,21 +69,41 @@ export function ChessBoard({
     [fen, selectedSquare, legalMoves, onMove, playerSide, disabled, isPlayerTurn]
   );
 
-  const customSquareStyles: Record<string, React.CSSProperties> = {};
+  const customSquareStyles = useMemo(() => {
+    const styles: Record<string, React.CSSProperties> = {};
 
-  // Highlight selected square
-  if (selectedSquare) {
-    customSquareStyles[selectedSquare] = {
-      backgroundColor: 'rgba(255, 255, 0, 0.4)',
-    };
-  }
+    for (let rankIndex = 0; rankIndex < RANKS.length; rankIndex += 1) {
+      for (let fileIndex = 0; fileIndex < FILES.length; fileIndex += 1) {
+        const square = `${FILES[fileIndex]}${RANKS[rankIndex]}`;
+        const isLightSquare = (rankIndex + fileIndex) % 2 === 0;
 
-  // Highlight legal moves
-  legalMoves.forEach((move) => {
-    customSquareStyles[move] = {
-      background: 'radial-gradient(circle, rgba(0,0,0,0.2) 25%, transparent 25%)',
-    };
-  });
+        styles[square] = {
+          backgroundColor: isLightSquare ? '#f7f4fa' : '#d8e3ef',
+          transition: 'all 0.18s ease',
+        };
+      }
+    }
+
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        ...styles[selectedSquare],
+        boxShadow: 'inset 0 0 0 4px rgba(255, 210, 84, 0.95)',
+      };
+    }
+
+    legalMoves.forEach((move) => {
+      styles[move] = {
+        ...styles[move],
+        backgroundImage:
+          'radial-gradient(circle, rgba(46, 54, 74, 0.28) 0%, rgba(46, 54, 74, 0.28) 18%, transparent 20%)',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '38% 38%',
+      };
+    });
+
+    return styles;
+  }, [selectedSquare, legalMoves]);
 
   const customPieces = {
     wP: () => <CrystalPiece piece="P" />,
@@ -106,6 +123,7 @@ export function ChessBoard({
   return (
     <div className="chessboard-container">
       <Chessboard
+        id="CrystalBoard"
         position={fen}
         onSquareClick={handleSquareClick}
         boardWidth={480}
@@ -115,11 +133,9 @@ export function ChessBoard({
         customBoardStyle={{
           borderRadius: '12px',
           boxShadow: '0 25px 50px rgba(0, 0, 0, 0.6)',
+          overflow: 'hidden',
         }}
-        customLightSquareStyle={{ backgroundColor: '#f2f2f2' }}
-customDarkSquareStyle={{ backgroundColor: '#404244' }}
-customSquareStyles={customSquareStyles}
-        
+        customSquareStyles={customSquareStyles}
       />
     </div>
   );
