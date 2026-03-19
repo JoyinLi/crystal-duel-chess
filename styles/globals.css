@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #e0e0e0;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Chessboard styling */
+.chessboard-container {
+  perspective: 1000px;
+}
+
+.chessboard-square {
+  transition: background-color 0.15s ease;
+}
+
+/* 棋子样式优化 */
+svg[viewBox="0 0 45 45"] {
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+}
+
+/* 强制设置棋盘格子颜色 */
+.chessboard-container [style*="background-color"] {
+  background-color: #FCFCFA !important;
+}
+
+/* 深色格子 */
+.chessboard-container div[style*="rgb(184, 139, 74)"],
+.chessboard-container div[style*="rgb(240, 217, 181)"] {
+  background-color: #C8C8C8 !important;
+}
+
+/* react-chessboard 的浅色格子 */
+.chessboard-container > div > div > div {
+  background-color: #FCFCFA !important;
+}
+
+/* react-chessboard 的深色格子 - 使用 nth-child 选择器 */
+.chessboard-container > div > div > div:nth-child(odd) {
+  background-color: #C8C8C8 !important;
+}
+
+.chessboard-container > div > div > div:nth-child(even) {
+  background-color: #FCFCFA !important;
+}
+
